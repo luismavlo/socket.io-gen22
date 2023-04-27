@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import { StudentList } from "./components/StudentList";
+import { StudentAdd } from "./components/StudentAdd";
 
 const connectSocketServer = () => {
   const socket = io.connect("http://localhost:4000", {
@@ -37,6 +38,22 @@ export const App = () => {
     });
   }, [socket]);
 
+  const vote = (id) => {
+    socket.emit("vote-student", id);
+  };
+
+  const deleteStudent = (id) => {
+    socket.emit("delete-student", id);
+  };
+
+  const changeStudentName = (id, name) => {
+    socket.emit("change-student-name", { id, name });
+  };
+
+  const createStudent = (name) => {
+    socket.emit("new-student", { name });
+  };
+
   return (
     <section className="container">
       <header className="alert">
@@ -52,9 +69,16 @@ export const App = () => {
 
       <div className="row">
         <div className="col-8">
-          <StudentList data={students} />
+          <StudentList
+            data={students}
+            vote={vote}
+            deleteStudent={deleteStudent}
+            changeStudentName={changeStudentName}
+          />
         </div>
-        <div className="col-4">Agregar Estudiante</div>
+        <div className="col-4">
+          <StudentAdd createStudent={createStudent} />
+        </div>
       </div>
     </section>
   );

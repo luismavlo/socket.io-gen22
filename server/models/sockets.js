@@ -15,6 +15,26 @@ class Sockets {
       console.log('Cliente conectado');
       // EMITE POR EL CURRENT-STUDENTS LOS ESTUDIANTES DEL ARREGLO
       socket.emit('current-students', this.studentList.getStudents());
+
+      socket.on('vote-student', (id) => {
+        this.studentList.increaseVotes(id);
+        this.io.emit('current-students', this.studentList.getStudents());
+      });
+
+      socket.on('delete-student', (id) => {
+        this.studentList.removeStudent(id);
+        this.io.emit('current-students', this.studentList.getStudents());
+      });
+
+      socket.on('change-student-name', ({ id, name }) => {
+        this.studentList.changeStudentName(id, name);
+        this.io.emit('current-students', this.studentList.getStudents());
+      });
+
+      socket.on('new-student', ({ name }) => {
+        this.studentList.addStudent(name);
+        this.io.emit('current-students', this.studentList.getStudents());
+      });
     });
   }
 }

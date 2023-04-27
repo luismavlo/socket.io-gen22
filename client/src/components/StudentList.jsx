@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 
-export const StudentList = ({ data }) => {
+export const StudentList = ({
+  data,
+  vote,
+  deleteStudent,
+  changeStudentName,
+}) => {
   const [students, setStudents] = useState(data);
 
   useEffect(() => {
@@ -20,12 +25,22 @@ export const StudentList = ({ data }) => {
     );
   };
 
+  const onLostFocus = (id, name) => {
+    changeStudentName(id, name);
+  };
+
   const createRows = () => {
     console.log(students);
     return students.map((student) => (
       <tr key={student.id}>
         <td>
-          <button className="btn btn-outline-success"> +1 </button>
+          <button
+            className="btn btn-outline-success"
+            onClick={() => vote(student.id)}
+          >
+            {" "}
+            +1{" "}
+          </button>
         </td>
         <td>
           <input
@@ -33,13 +48,18 @@ export const StudentList = ({ data }) => {
             className="form-control"
             value={student.name}
             onChange={(event) => changeName(event, student.id)}
+            onBlur={() => onLostFocus(student.id, student.name)}
           />
         </td>
         <td>
           <h3>{student.votes}</h3>
         </td>
         <td>
-          <button type="button" className="btn btn-outline-danger">
+          <button
+            type="button"
+            className="btn btn-outline-danger"
+            onClick={() => deleteStudent(student.id)}
+          >
             Borrar
           </button>
         </td>
@@ -65,3 +85,5 @@ export const StudentList = ({ data }) => {
     </>
   );
 };
+
+SALAS;
